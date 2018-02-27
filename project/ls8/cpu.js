@@ -8,7 +8,7 @@ const fs = require('fs');
 
 const HLT  = 0b00000001; // Halt CPU
 // !!! IMPLEMENT ME
-const LDI = 0b10011001;
+const LDI = 0b10011001; 
 const MUL = 0b10101010;
 const PRN = 0b01000011;
 const ADD = 0b10101000;
@@ -130,7 +130,7 @@ class CPU {
         // Increment the PC register to go to the next instruction
         // !!! IMPLEMENT ME
         // need to know how many bytes to move along
-        this.reg.PC += 
+       reg.PC++; 
     }
 
     // INSTRUCTION HANDLER CODE:

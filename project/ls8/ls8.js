@@ -24,7 +24,7 @@ function processFile(content, cpu, onComplete) {
             line = line.substr(0, line.indexOf('#'));
         }
         // Remove whitespace from either end of the line
-        line = lline.trim();
+        line = line.trim();
         // Ignore empty lines
         if(line === '') {
             continue;
