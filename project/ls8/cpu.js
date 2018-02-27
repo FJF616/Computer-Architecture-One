@@ -100,7 +100,7 @@ class CPU {
      * Advances the CPU one cycle
      */
     tick() {
-        // Load the instruction register (OR) from the current PC
+        // Load the instruction register (IR) from the current PC
         // !!! IMPLEMENT ME
         this.reg.IR = this.ram.read(this.reg.PC);
         // Debugging output
@@ -143,16 +143,26 @@ class CPU {
     /**
      * HLT
      */
+<<<<<<< HEAD
     HLT(regA, regB) {
         // !!! IMPLEMENT ME
         this.alu('HLT', regA, regB);
+=======
+    HLT() {
+        this.stopClock();
+>>>>>>> 36e3429d3110215ffe61e9ec300f63f7b0745e71
     }
 
     /**
      * LDI R,I
      */
+<<<<<<< HEAD
     LDI(regNum, value) {
         this.reg[regNum] = value & 255;    // !!! IMPLEMENT ME
+=======
+    LDI(reg, value) {
+        // !!! IMPLEMENT ME
+>>>>>>> 36e3429d3110215ffe61e9ec300f63f7b0745e71
     }
 
     /**
@@ -160,7 +170,10 @@ class CPU {
      */
     MUL(regA, regB) {
         // !!! IMPLEMENT ME
+<<<<<<< HEAD
         this.alu('MUL', regA, regB);
+=======
+>>>>>>> 36e3429d3110215ffe61e9ec300f63f7b0745e71
         // Call the ALU
     }
 
@@ -168,7 +181,10 @@ class CPU {
      * PRN R
      */
     PRN(regA) {
+<<<<<<< HEAD
         console.log(this.reg[regA]);
+=======
+>>>>>>> 36e3429d3110215ffe61e9ec300f63f7b0745e71
         // !!! IMPLEMENT ME
 
     }
