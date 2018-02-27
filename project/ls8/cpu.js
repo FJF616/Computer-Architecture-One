@@ -103,8 +103,7 @@ class CPU {
                 this.reg[regA] = this.reg[regA] & this.reg[regB];
                 regA = regA & regB
                 break;
-            case 'NOP': 
-                this.reg
+           
                 
             }
     }
