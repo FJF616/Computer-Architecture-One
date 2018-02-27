@@ -12,6 +12,8 @@ const LDI = 0b10011001;
 const MUL = 0b10101010;
 const PRN = 0b01000011;
 const ADD = 0b10101000;
+const AND = 0b10110011;
+const NOP = 0b00000000;
 /**
  * Class for simulating a simple Computer (CPU & memory)
  */
@@ -43,6 +45,8 @@ class CPU {
         bt[MUL] = this.MUL;
         bt[LDI] = this.LDI;
         bt[PRN] = this.PRN;
+        bt[AND] = this.AND;
+        bt[NOP] = this.NOP;
         // !!! IMPLEMENT ME
         // LDI
         // MUL
@@ -93,6 +97,15 @@ class CPU {
                 this.reg[regA] = this.reg[regA] + this.reg[regB];
                 regA = regA + regB
                 break;
+            
+            case 'AND':
+                // IMPLEMENT ME
+                this.reg[regA] = this.reg[regA] & this.reg[regB];
+                regA = regA & regB
+                break;
+            case 'NOP': 
+                this.reg
+                
             }
     }
 
@@ -130,7 +143,7 @@ class CPU {
         // Increment the PC register to go to the next instruction
         // !!! IMPLEMENT ME
         // need to know how many bytes to move along
-       reg.PC++; 
+        this.reg.PC += ((this.reg.IR >> 6) & 0b00000011) + 1; 
     }
 
     // INSTRUCTION HANDLER CODE:
@@ -143,26 +156,19 @@ class CPU {
     /**
      * HLT
      */
-<<<<<<< HEAD
     HLT(regA, regB) {
         // !!! IMPLEMENT ME
-        this.alu('HLT', regA, regB);
-=======
-    HLT() {
+    //     this.alu('HLT', regA, regB);
+    // }
+    // HLT() {
         this.stopClock();
->>>>>>> 36e3429d3110215ffe61e9ec300f63f7b0745e71
     }
 
     /**
      * LDI R,I
      */
-<<<<<<< HEAD
     LDI(regNum, value) {
         this.reg[regNum] = value & 255;    // !!! IMPLEMENT ME
-=======
-    LDI(reg, value) {
-        // !!! IMPLEMENT ME
->>>>>>> 36e3429d3110215ffe61e9ec300f63f7b0745e71
     }
 
     /**
@@ -170,24 +176,29 @@ class CPU {
      */
     MUL(regA, regB) {
         // !!! IMPLEMENT ME
-<<<<<<< HEAD
-        this.alu('MUL', regA, regB);
-=======
->>>>>>> 36e3429d3110215ffe61e9ec300f63f7b0745e71
         // Call the ALU
+        this.alu('MUL', regA, regB);
     }
 
     /**
      * PRN R
      */
     PRN(regA) {
-<<<<<<< HEAD
-        console.log(this.reg[regA]);
-=======
->>>>>>> 36e3429d3110215ffe61e9ec300f63f7b0745e71
         // !!! IMPLEMENT ME
-
+        console.log(this.reg[regA]);
     }
+      /**
+     * AND RR
+     */
+    AND(regA, regB) {
+        this.alu('AND', regA, regB);
+    }   
+  /**
+     * NOP RR
+     */
+    NOP() {
+       return;
+    }    
 }
 
 module.exports = CPU;
