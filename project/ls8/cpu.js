@@ -54,33 +54,36 @@ class CPU {
         bt[OR] = this.OR;
         bt[XOR] = this.XOR;
         bt[NOT] = this.NOT;
-        // bt[CALL] = this.CALL;
-        // bt[CMP]  = this.CMP;
-        // bt[DEC]  = this.DEC;
-        // bt[DIV]  = this.DIV;
-        // bt[INC]  = this.INC;
-        // bt[INT]  = this.INT;
-        // bt[IRET] = this.IRET;
-        // bt[JEQ]  = this.JEQ;
-        // bt[JGT]  = this.JGT;
-        // bt[JLT]  = this.JLT;
-        // bt[JMP]  = this.JMP;
-        // bt[JNE]  = this.JNE;
-        // bt[LD]   = this.LD;
-        // bt[MOD]  = this.MOD;
-        // bt[POP]  = this.POP;
-        // bt[PRA]  = this.PRA;
-        // bt[PUSH] = this.PUSH;
-        // bt[RET]  = this.RET;
-        // bt[ST]   = this.ST;
-        // bt[SUB]  = this.SUB;
+        bt[CALL] = this.CALL;
+        bt[CMP]  = this.CMP;
+        bt[DEC]  = this.DEC;
+        bt[DIV]  = this.DIV;
+        bt[INC]  = this.INC;
+        bt[INT]  = this.INT;
+        bt[IRET] = this.IRET;
+        bt[JEQ]  = this.JEQ;
+        bt[JGT]  = this.JGT;
+        bt[JLT]  = this.JLT;
+        bt[JMP]  = this.JMP;
+        bt[JNE]  = this.JNE;
+        bt[LD]   = this.LD;
+        bt[MOD]  = this.MOD;
+        bt[POP]  = this.POP;
+        bt[PRA]  = this.PRA;
+        bt[PUSH] = this.PUSH;
+        bt[RET]  = this.RET;
+        bt[ST]   = this.ST;
+        bt[SUB]  = this.SUB;
       
     // Bind all the functions to this so we can call them later
+    
+    
     for (let k of Object.keys(bt)) {
-      
+       bt[k] = bt[k].bind(this)
     }
-
     this.branchTable = bt;
+
+   
   }
     /**
      * Store value in memory address, useful for program loading
@@ -183,11 +186,28 @@ class CPU {
     }
 
     // INSTRUCTION HANDLER CODE:
-  /**
+    pushHelper(value) {
+        this.reg[SP] = this.reg[SP] -1;
+        this.ram.write(this.reg[SP], value);
+    }
+    /**
      * ADD RR
      */
     ADD(regA, regB) {
         this.alu('ADD', regA, regB);
+    }
+    /**
+     * AND RR
+     */
+    AND(regA, regB) {
+        this.alu('AND', regA, regB);
+    }   
+    /**
+     * CALL 
+     */
+    CALL(regNum) {
+        //this.PUSH(...);
+        pushHelper(this.reg.PC + 2);
     }
     /**
      * HLT
@@ -215,7 +235,19 @@ class CPU {
         // Call the ALU
         this.alu('MUL', regA, regB);
     }
-
+    /**
+     * NOP 
+     */
+    NOP() {
+        return;
+     }  
+     /**
+      * OR RR
+      */  
+     OR(regA, regB) {
+         this.alu('OR', regA, regB)
+     }
+    
     /**
      * PRN R
      */
@@ -223,24 +255,21 @@ class CPU {
         // !!! IMPLEMENT ME
         console.log(this.reg[regA]);
     }
-    /**
-     * AND RR
+     /**
+     * PUSH 
      */
-    AND(regA, regB) {
-        this.alu('AND', regA, regB);
-    }   
-    /**
-     * NOP 
-     */
-    NOP() {
-       return;
-    }  
-    /**
-     * OR RR
-     */  
-    OR(regA, regB) {
-        this.alu('OR', regA, regB)
+    PUSH(regNum) {
+        // !!! IMPLEMENT ME
+        let value = this.reg[regNum];
+        // let currentSP = this.reg[SP];
+        // let newSP = currentSP - 1;
+        // this.reg[SP] = newSP;
+
+        // this.ram.write(this.reg[SP], value);
+        pushHelper(value)
     }
+    
+    
 
 }
 
