@@ -14,6 +14,10 @@ const PRN = 0b01000011;
 const ADD = 0b10101000;
 const AND = 0b10110011;
 const NOP = 0b00000000;
+const NOT = 0b01110000;
+const XOR = 0b10110010;
+const OR = 0b10110001;
+
 /**
  * Class for simulating a simple Computer (CPU & memory)
  */
@@ -47,6 +51,9 @@ class CPU {
         bt[PRN] = this.PRN;
         bt[AND] = this.AND;
         bt[NOP] = this.NOP;
+        bt[OR] = this.OR;
+        bt[XOR] = this.XOR;
+        bt[NOT] = this.NOT;
         // !!! IMPLEMENT ME
         // LDI
         // MUL
@@ -103,7 +110,17 @@ class CPU {
                 this.reg[regA] = this.reg[regA] & this.reg[regB];
                 regA = regA & regB
                 break;
-           
+            case 'OR':
+                this.reg[regA] = valA | valB;
+                break;
+        
+              case 'NOT':
+                this.reg[regA] = ~valA;
+                break;
+        
+              case 'XOR':
+                this.reg[regA] = valA ^ valB;
+                break;
                 
             }
     }
@@ -186,18 +203,25 @@ class CPU {
         // !!! IMPLEMENT ME
         console.log(this.reg[regA]);
     }
-      /**
+    /**
      * AND RR
      */
     AND(regA, regB) {
         this.alu('AND', regA, regB);
     }   
-  /**
-     * NOP RR
+    /**
+     * NOP 
      */
     NOP() {
        return;
-    }    
+    }  
+    /**
+     * OR RR
+     */  
+    OR(regA, regB) {
+        this.alu('OR', regA, regB)
+    }
+
 }
 
 module.exports = CPU;
