@@ -2,7 +2,7 @@
  * RAM access
  */
 class RAM {
-    constructor(size) {
+    constructor(size=256) {
         this.mem = new Array(size);
         this.mem.fill(0);
     }

@@ -54,14 +54,34 @@ class CPU {
         bt[OR] = this.OR;
         bt[XOR] = this.XOR;
         bt[NOT] = this.NOT;
-        // !!! IMPLEMENT ME
-        // LDI
-        // MUL
-        // PRN
+        // bt[CALL] = this.CALL;
+        // bt[CMP]  = this.CMP;
+        // bt[DEC]  = this.DEC;
+        // bt[DIV]  = this.DIV;
+        // bt[INC]  = this.INC;
+        // bt[INT]  = this.INT;
+        // bt[IRET] = this.IRET;
+        // bt[JEQ]  = this.JEQ;
+        // bt[JGT]  = this.JGT;
+        // bt[JLT]  = this.JLT;
+        // bt[JMP]  = this.JMP;
+        // bt[JNE]  = this.JNE;
+        // bt[LD]   = this.LD;
+        // bt[MOD]  = this.MOD;
+        // bt[POP]  = this.POP;
+        // bt[PRA]  = this.PRA;
+        // bt[PUSH] = this.PUSH;
+        // bt[RET]  = this.RET;
+        // bt[ST]   = this.ST;
+        // bt[SUB]  = this.SUB;
+      
+    // Bind all the functions to this so we can call them later
+    for (let k of Object.keys(bt)) {
+      
+    }
 
-		this.branchTable = bt;
-	}
-
+    this.branchTable = bt;
+  }
     /**
      * Store value in memory address, useful for program loading
      */
