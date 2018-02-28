@@ -13,7 +13,7 @@ class RAM {
     write(MAR, MDR) {
         // !!! IMPLEMENT ME
         // write the value in the MDR to the address MAR
-        const size = 256;
+       
         this.mem[MAR & (size-1)] = MDR;
     }
 
@@ -25,7 +25,7 @@ class RAM {
     read(MAR) {
         // !!! IMPLEMENT ME
         // Read the value in address MAR and return it
-        const size = 256;
+   
         return this.mem[MAR & (size-1)];
     }
 }

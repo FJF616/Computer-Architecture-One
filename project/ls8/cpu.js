@@ -3,6 +3,7 @@
  */
 
 const fs = require('fs');
+const ram = require('./ram.js');
 
 // Instructions
 
@@ -28,7 +29,6 @@ class CPU {
      */
     constructor(ram) {
         this.ram = ram;
-
         this.reg = new Array(8).fill(0); // General-purpose registers
         
         // Special-purpose registers
