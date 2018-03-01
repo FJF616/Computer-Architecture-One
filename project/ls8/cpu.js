@@ -9,15 +9,37 @@ const ram = require('./ram.js');
 
 const HLT  = 0b00000001; // Halt CPU
 // !!! IMPLEMENT ME
-const LDI = 0b10011001; 
-const MUL = 0b10101010;
-const PRN = 0b01000011;
-const ADD = 0b10101000;
-const AND = 0b10110011;
-const NOP = 0b00000000;
-const NOT = 0b01110000;
-const XOR = 0b10110010;
-const OR = 0b10110001;
+const LDI = 0b10011001;  // LDI R,I(mmediate)
+const MUL = 0b10101010;  // MUL R,R
+const PRN = 0b01000011;  // Print numeric register
+const ADD = 0b10101000;  // ADD R R
+const AND = 0b10110011;  // AND R R
+const NOP = 0b00000000;  // NOP
+const NOT = 0b01110000;  // NOT R
+const XOR = 0b10110010;  // XOR R R
+const OR = 0b10110001;   // OR R R
+const CALL = 0b01001000; // CALL R
+const CMP  = 0b10100000; // CMP R R
+const DEC  = 0b01111001; // DEC R
+const DIV  = 0b10101011; // DIV R R
+const HLT  = 0b00000001; // Halt CPU
+const INC  = 0b01111000; // INC R
+const INT  = 0b01001010; // Software interrupt R
+const IRET = 0b00001011; // Return from interrupt
+const JEQ  = 0b01010001; // JEQ R
+const JGT  = 0b01010100; // JGT R
+const JLT  = 0b01010011; // JLT R
+const JMP  = 0b01010000; // JMP R
+const JNE  = 0b01010010; // JNE R
+const LD   = 0b10011000; // Load R,R
+const MOD  = 0b10101100; // MOD R R
+const POP  = 0b01001100; // Pop R
+const PRA  = 0b01000010; // Print alpha char
+const PRN  = 0b01000011; // Print numeric register
+const PUSH = 0b01001101; // Push R
+const RET  = 0b00001001; // Return
+const ST   = 0b10011010; // Store R,R
+const SUB  = 0b10101001; // SUB R R
 
 /**
  * Class for simulating a simple Computer (CPU & memory)
@@ -30,10 +52,17 @@ class CPU {
     constructor(ram) {
         this.ram = ram;
         this.reg = new Array(8).fill(0); // General-purpose registers
+
+        this.reg[IM] = 0; // All interrupts masked
+        this.reg[IS] = 0; // No interrupts active
+        this.reg[SP] = 0xf4; // Stack empty
+
         
         // Special-purpose registers
         this.reg.PC = 0; // Program Counter
         this.reg.IR = 0; // Instruction Register
+        this.reg.FL = 0; // Flags
+        this.interruptsEnabled = true;
 
 		this.setupBranchTable();
     }
@@ -79,7 +108,7 @@ class CPU {
     
     
     for (let k of Object.keys(bt)) {
-       bt[k] = bt[k].bind(this)
+       bt[k] = bt[k].bind(this)  //
     }
     this.branchTable = bt;
 
@@ -91,7 +120,16 @@ class CPU {
     poke(address, value) {
         this.ram.write(address, value);
     }
+     /**
+   * Raise an interrupt
+   * 
+   * @param n Interrupt number, 0-7
+   */
+    raiseInterrupt(n) {
+    this.reg[IS] |= intMask[n];
+    }
 
+  /**
     /**
      * Starts the clock ticking on the CPU
      */
@@ -178,18 +216,44 @@ class CPU {
         // We need to use call() so we can set the "this" value inside
         // the handler (otherwise it will be undefined in the handler)
         handler.call(this, operandA, operandB);
-
+        if (nextPC === undefined) {
+            
         // Increment the PC register to go to the next instruction
         // !!! IMPLEMENT ME
         // need to know how many bytes to move along
         this.reg.PC += ((this.reg.IR >> 6) & 0b00000011) + 1; 
+    } else {
+        this.reg.PC = nextPC;
+     }
     }
-
     // INSTRUCTION HANDLER CODE:
+     /**
+       * Internal push helper, doesn't move PC
+       */
+      _push(value) {
+        // Decrement SP, stack grows down from address 0xF7
+        this.alu('DEC', SP);
+    
+        // Store value at the current SP
+        this.ram.write(this.reg[SP], value);
+     }
     pushHelper(value) {
-        this.reg[SP] = this.reg[SP] -1;
+        this.reg[SP]--
         this.ram.write(this.reg[SP], value);
     }
+    popHelper() {
+        let val = this.ram.read(this.reg[SP]);
+        this.reg[SP]++;
+        return val;
+    }
+    _pop() {
+        const val = this.ram.read(this.reg[SP]);
+    
+        // Increment SP, stack grows down from address 255
+        this.alu('INC', SP);
+    
+        return val;
+      }
     /**
      * ADD RR
      */
@@ -244,7 +308,7 @@ class CPU {
      /**
       * OR RR
       */  
-     OR(regA, regB) {
+    OR(regA, regB) {
          this.alu('OR', regA, regB)
      }
     
@@ -268,7 +332,28 @@ class CPU {
         // this.ram.write(this.reg[SP], value);
         pushHelper(value)
     }
+   
     
+      /**
+       * POP R
+       */
+      POP(regNum) {
+        this.reg[regNum] = this._pop();
+        // let val = popHelper();
+        
+      }
+    
+      /**
+       * PRA R
+       */
+      PRA(reg) {
+        fs.writeSync(process.stdout.fd, String.fromCharCode(this.reg[reg]));
+      }
+    
+     
+     
+    
+     
     
 
 }
