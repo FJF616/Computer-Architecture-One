@@ -150,8 +150,8 @@ class CPU {
     stopClock() {
         clearInterval(this.clock);
     }
-        00000100 //FL
-        00000001 
+        // 00000100 //FL
+        // 00000001 
     /**
      * ALU functionality
      * 
@@ -179,14 +179,19 @@ class CPU {
                 this.reg[regA] = valA | valB;
                 break;
         
-              case 'NOT':
+            case 'NOT':
                 this.reg[regA] = ~valA;
                 break;
-        
-              case 'XOR':
+    
+            case 'XOR':
                 this.reg[regA] = valA ^ valB;
                 break;
-                
+
+            case 'CMP':
+                this.setFlag(FLAG_EQ, valA === valB);
+                this.setFlag(FLAG_GT, valA > valB);
+                this.setFlag(FLAG_LT, valA < valB);
+                break;    
             }
     }
 
@@ -226,21 +231,21 @@ class CPU {
         // !!! IMPLEMENT ME
         // need to know how many bytes to move along
         this.reg.PC += ((this.reg.IR >> 6) & 0b00000011) + 1; 
-    } else {
-        this.reg.PC = nextPC;
-     }
+        } else {
+            this.reg.PC = nextPC;
+        }
     }
     // INSTRUCTION HANDLER CODE:
      /**
        * Internal push helper, doesn't move PC
        */
-      _push(value) {
-        // Decrement SP, stack grows down from address 0xF7
-        this.alu('DEC', SP);
-    
-        // Store value at the current SP
-        this.ram.write(this.reg[SP], value);
-     }
+    _push(value) {
+    // Decrement SP, stack grows down from address 0xF7
+    this.alu('DEC', SP);
+
+    // Store value at the current SP
+    this.ram.write(this.reg[SP], value);
+    }
     pushHelper(value) {
         this.reg[SP]--
         this.ram.write(this.reg[SP], value);
@@ -276,6 +281,10 @@ class CPU {
     CALL(regNum) {
         //this.PUSH(...);
         pushHelper(this.reg.PC + 2);
+        // Now we need an address
+        const addr = this.reg[regNum];
+        // instruct the PC to start executing at that address
+        return addr;
     }
     /**
      * HLT
@@ -357,7 +366,7 @@ class CPU {
        * CMP RR
        */
     CMP(regA, regB) {
-
+        this.alu('CMP', regA, regB);
     }
     /**
        * JMP R
