@@ -61,8 +61,11 @@ class CPU {
         // Special-purpose registers
         this.reg.PC = 0; // Program Counter
         this.reg.IR = 0; // Instruction Register
-        this.reg.FL = 0; // Flags
-        this.interruptsEnabled = true;
+       // this.reg.FL = 0; // Flags
+       // this.interruptsEnabled = true;
+        this.reg[SP] = 0xf4;
+        this.reg[SP] = 0b11110100;
+        this.reg[SP] = 244;
 
 		this.setupBranchTable();
     }
@@ -147,7 +150,8 @@ class CPU {
     stopClock() {
         clearInterval(this.clock);
     }
-
+        00000100 //FL
+        00000001 
     /**
      * ALU functionality
      * 
@@ -333,22 +337,46 @@ class CPU {
         pushHelper(value)
     }
    
+
+    /**
+     * POP R
+     */
+    POP(regNum) {
+    this.reg[regNum] = this._pop();
+    // let val = popHelper();
     
-      /**
-       * POP R
+    }
+
+    /**
+     * PRA R
+     */
+    PRA(regNum) {
+    fs.writeSync(process.stdout.fd, String.fromCharCode(this.reg[reg]));
+    }
+    /**
+       * CMP RR
        */
-      POP(regNum) {
-        this.reg[regNum] = this._pop();
-        // let val = popHelper();
+    CMP(regA, regB) {
+
+    }
+    /**
+       * JMP R
+       */
+    JMP(regNum) {
         
-      }
-    
-      /**
-       * PRA R
+    }
+    /**
+       * JEQ R
        */
-      PRA(reg) {
-        fs.writeSync(process.stdout.fd, String.fromCharCode(this.reg[reg]));
-      }
+    JEQ(regNum) {
+        
+    }
+    /**
+       * JNE R
+       */
+    JNE(regNum) {
+        
+    }
     
      
      
