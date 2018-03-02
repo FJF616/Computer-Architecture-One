@@ -362,6 +362,9 @@ class CPU {
     PRA(regNum) {
     fs.writeSync(process.stdout.fd, String.fromCharCode(this.reg[reg]));
     }
+
+
+    /***************SPRINT CHALLENGE***************** */
     /**
        * CMP RR
        */
@@ -372,19 +375,25 @@ class CPU {
        * JMP R
        */
     JMP(regNum) {
-        
+        //execute at specified register
+        return this.reg[regNum];
     }
     /**
        * JEQ R
        */
     JEQ(regNum) {
-        
+        //execute at specified register when equal flag is set true
+        if (this.getFlag(FLAG_EQ)) {
+            return this.reg[regNum];
+          } 
     }
     /**
        * JNE R
        */
     JNE(regNum) {
-        
+        // if equal flag is false, execute at specified register
+        if (!this.getFlag(FLAG_EQ)) {
+            return this.reg[regNum]; 
     }
     
      
